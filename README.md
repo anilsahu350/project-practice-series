@@ -226,7 +226,7 @@ sudo apt-get install trivy -y
         
     * Update the `variable.tf` file with the key name , if you have entered another key name.
         
-2. **Initialize Terraform**: Run the initialization command to download provider plugins and prepare your working directory:
+2. **Initialize Terraform**: Run the initialization command to download provider plugins and prepare your working directory:(<a href="https://github.com/anilsahu350/terraform-for-devops">Check file(ec2,terraform,providers & ouputs</a>))
     
     ```bash
     terraform init
@@ -451,6 +451,55 @@ After that, go to `app`&gt;`new app`&gt;`create`
 
 Once connected, your repository will be ready for deploying applications via ArgoCD.
 
+## Step 11: Creating an Application on ArgoCD
+
+### 1\. General Section
+
+* **Application Name**: Choose a name for your application.
+    
+* **Project Name**: Select **default**.
+    
+* **Sync Policy**: Choose **Automatic**.
+    
+* Enable **Prune Resources** and **Self-Heal**.
+    
+* Check **Auto Create Namespace**.
+    
+
+---
+
+### 2\. Source Section
+
+* **Repo URL**: Enter the URL of your Git repository.
+    
+* **Revision**: Select the branch (e.g., `main`).
+    
+* **Path**: Specify the directory containing your Kubernetes manifests (e.g., `k8s`).
+    
+
+---
+
+### 3\. Destination Section
+
+* **Cluster**: Select your desired cluster.
+    
+* **Namespace**: Use `bankapp-namespace`.
+    
+
+---
+
+### 4\. Create the Application
+
+Click **Create** to finish the setup and deploy your application.
+
+![image](https://github.com/user-attachments/assets/c264ccbc-9ba7-40e1-8925-47e48ec65b26)
+
+
+![image](https://github.com/user-attachments/assets/dbabd258-d314-4648-b17a-f17bdb1ec55d)
+
+
+---
+
 ---
 
 ## Step 10: Installing Helm, Ingress Controller, and Setting Up Metrics for HPA in Kubernetes
@@ -506,6 +555,10 @@ kubectl get svc -n ingress-nginx
 ### 3\. Apply Metrics Server for HPA
 
 To enable **Horizontal Pod Autoscaling (HPA)** in your Kubernetes cluster, the **metrics-server** is required to collect resource usage data like CPU and memory from the pods. HPA scales your application based on these metrics.
+```bash 
+kubectl top pod -n bankapp-namespace
+```
+(it will show cpu unknown)
 
 Run the following command to apply the **metrics-server**:
 
@@ -515,6 +568,18 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 ```
 
 Once installed, the metrics-server will start collecting data from your Kubernetes nodes and pods, enabling you to configure HPA based on these metrics.
+```bash
+kubectl get ns
+```
+```bash
+kubectl top node
+```
+```bash
+kubectl top pod -n bankapp-namespace
+```
+```bash
+kubectl get hpa -n bankapp-namespace
+```
 
 ---
 
@@ -533,54 +598,6 @@ Once installed, Cert-Manager will be responsible for automatically issuing and r
 
 ---
 
-## Step 11: Creating an Application on ArgoCD
-
-### 1\. General Section
-
-* **Application Name**: Choose a name for your application.
-    
-* **Project Name**: Select **default**.
-    
-* **Sync Policy**: Choose **Automatic**.
-    
-* Enable **Prune Resources** and **Self-Heal**.
-    
-* Check **Auto Create Namespace**.
-    
-
----
-
-### 2\. Source Section
-
-* **Repo URL**: Enter the URL of your Git repository.
-    
-* **Revision**: Select the branch (e.g., `main`).
-    
-* **Path**: Specify the directory containing your Kubernetes manifests (e.g., `k8s`).
-    
-
----
-
-### 3\. Destination Section
-
-* **Cluster**: Select your desired cluster.
-    
-* **Namespace**: Use `bankapp-namespace`.
-    
-
----
-
-### 4\. Create the Application
-
-Click **Create** to finish the setup and deploy your application.
-
-![image](https://github.com/user-attachments/assets/c264ccbc-9ba7-40e1-8925-47e48ec65b26)
-
-
-![image](https://github.com/user-attachments/assets/dbabd258-d314-4648-b17a-f17bdb1ec55d)
-
-
----
 
 ## Step 12: Exposing the Application via Ingress or NodePort
 
